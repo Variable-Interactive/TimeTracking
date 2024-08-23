@@ -30,11 +30,23 @@ func _ready() -> void:
 
 	# signal to detect manual saves (through "save"). this is unrelated to "save as"
 	var file_menu: PopupMenu = extension_api.general.get_global().top_menu_container.file_menu
+	## Re-ordering signal callables so that calculate_save gets called first
+	var old_file_menu_connections = file_menu.id_pressed.get_connections()
+	for connection in old_file_menu_connections:
+		file_menu.id_pressed.disconnect(connection["callable"])
 	file_menu.id_pressed.connect(calculate_save)
+	for connection in old_file_menu_connections:
+		file_menu.id_pressed.connect(connection["callable"], connection["flags"])
 
 	# signal to detect manual saves (through "file dialog")
 	var save_dialog: FileDialog = extension_api.general.get_global().save_sprites_dialog
+	## Re-ordering signal callables so that calculate_save gets called first
+	var old_save_dialog_connections = save_dialog.file_selected.get_connections()
+	for connection in old_save_dialog_connections:
+		save_dialog.file_selected.disconnect(connection["callable"])
 	save_dialog.file_selected.connect(calculate_save)
+	for connection in old_save_dialog_connections:
+		save_dialog.file_selected.connect(connection["callable"], connection["flags"])
 	change_target()
 
 
@@ -77,10 +89,9 @@ func update_ui():
 # Stat display functions
 ## Relatively simple and straightfarward function. Just displays "name" and "path" of project.
 func show_name_path():
-	var p_info = extension_api.project.get_project_info(project_in_focus)
-	p_name.text = p_info.export_file_name
-	if p_info.save_path:
-		directory.text = p_info.save_path
+	p_name.text = project_in_focus.file_name
+	if project_in_focus.save_path:
+		directory.text = project_in_focus.save_path
 
 
 ## Displays the total time spent on target project in humanized format.
@@ -137,12 +148,14 @@ func project_changes_made() -> void:
 
 # calculator of save
 func calculate_save(variant = null):
+	## NOTE: we are using file dialog signals because this data has to be calculated "Before"
+	## project gets saved.
 	var total_saves = project_in_focus.get_meta("total_saves", 0)
 
 	if typeof(variant) == TYPE_INT:
-		if variant == 4:  # Save (not Save as)
+		if variant == extension_api.general.get_global().FileMenu.SAVE:  # Save (not Save as)
 			var opensave = get_node_or_null("/root/OpenSave")
-			var path = opensave.current_save_paths[extension_api.general.get_global().current_project_index]
+			var path = project_in_focus.save_path
 
 			# Furthermore only increment if this isn't the "First" save
 			# (As the first save is always the "Save as")
