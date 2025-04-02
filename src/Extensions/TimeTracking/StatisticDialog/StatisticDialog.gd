@@ -10,7 +10,7 @@ extends AcceptDialog
 @onready var saves_total: LineEdit = %Saves
 @onready var sesions_total: LineEdit = %Sesions
 
-var project_in_focus: Project:
+var project_in_focus:
 	set(new_project):
 		timer.stop()
 		if project_in_focus:
