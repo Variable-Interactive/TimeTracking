@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c6j7xd3v8m0pe"]
 
-[ext_resource type="Script" path="res://src/Extensions/TimeTracking/StatisticDialog/StatisticDialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://cqiahpkmc1pvk" path="res://src/Extensions/TimeTracking/StatisticDialog/StatisticDialog.gd" id="1"]
 
 [node name="AcceptDialog" type="AcceptDialog"]
 position = Vector2i(0, 36)
@@ -48,9 +48,9 @@ editable = false
 
 [node name="Label2" type="Label" parent="VBoxContainer/File/GridContainer"]
 layout_mode = 2
-text = "DirAccess:"
+text = "Location:"
 
-[node name="DirAccess" type="LineEdit" parent="VBoxContainer/File/GridContainer"]
+[node name="Location" type="LineEdit" parent="VBoxContainer/File/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

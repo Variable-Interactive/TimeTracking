@@ -4,7 +4,7 @@ extends AcceptDialog
 @onready var timer: Timer = $Timer
 
 @onready var p_name: LineEdit = %Name
-@onready var directory: LineEdit = %DirAccess
+@onready var directory: LineEdit = %Location
 @onready var time_total: LineEdit = %TimeTotal
 @onready var changes_total: LineEdit = %Changes
 @onready var saves_total: LineEdit = %Saves
@@ -152,19 +152,18 @@ func calculate_save(variant = null):
 	## project gets saved.
 	var total_saves = project_in_focus.get_meta("total_saves", 0)
 
-	if typeof(variant) == TYPE_INT:
+	if typeof(variant) == TYPE_INT:  # When an item in file menu is pressed (variant is menu id)
 		if variant == extension_api.general.get_global().FileMenu.SAVE:  # Save (not Save as)
-			var opensave = get_node_or_null("/root/OpenSave")
 			var path = project_in_focus.save_path
 
 			# Furthermore only increment if this isn't the "First" save
-			# (As the first save is always the "Save as")
+			# (As the first save is always done using "Save as"). This is a kind of failsafe
 			if path != "":
-				# this is whenever a save occurs without using the file dialog
+				# This is whenever a save occurs without using the file dialog
 				project_in_focus.set_meta("total_saves", total_saves + 1)
 
-	elif typeof(variant) == TYPE_STRING:  # Save as
-		# this is whenever a save occurs using the file dialog
+	elif typeof(variant) == TYPE_STRING:  # Save as (the variant is the save path in this case)
+		# This is whenever a save occurs using the file dialog
 		project_in_focus.set_meta("total_saves", total_saves + 1)
 
 
@@ -182,9 +181,9 @@ func check_new_session():
 # Helper functions
 func time_convert(time_in_sec: int):
 	var seconds = time_in_sec % 60
-# warning-ignore:integer_division
+	@warning_ignore("integer_division")
 	var minutes = (time_in_sec / 60) % 60
-# warning-ignore:integer_division
+	@warning_ignore("integer_division")
 	var hours = time_in_sec / 3600
 
 	#returns a string with the format "HH:MM:SS"

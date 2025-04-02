@@ -7,7 +7,7 @@ var statistics_dialog: AcceptDialog
 
 # This script acts as a setup for the extension
 func _ready() -> void:
-	var type = extension_api.menu.HELP
+	var type = extension_api.menu.PROJECT
 	statistics_dialog = preload(
 		"res://src/Extensions/TimeTracking/StatisticDialog/StatisticDialog.tscn"
 	).instantiate()
@@ -17,6 +17,6 @@ func _ready() -> void:
 
 func _exit_tree() -> void:  # Extension is being uninstalled or disabled
 	# remember to remove things that you added using this extension
-	extension_api.menu.remove_menu_item(extension_api.menu.HELP, item_id)
+	extension_api.menu.remove_menu_item(extension_api.menu.PROJECT, item_id)
 	statistics_dialog.extension_about_to_shutdown()
 	statistics_dialog.queue_free()
