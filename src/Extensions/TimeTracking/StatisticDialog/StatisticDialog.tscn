@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cqiahpkmc1pvk" path="res://src/Extensions/TimeTracking/StatisticDialog/StatisticDialog.gd" id="1"]
 
 [node name="AcceptDialog" type="AcceptDialog"]
+title = "Project Statistics"
 position = Vector2i(0, 36)
 size = Vector2i(420, 327)
 script = ExtResource("1")

@@ -39,7 +39,7 @@ func _ready() -> void:
 		file_menu.id_pressed.connect(connection["callable"], connection["flags"])
 
 	# signal to detect manual saves (through "file dialog")
-	var save_dialog: FileDialog = extension_api.general.get_global().save_sprites_dialog
+	var save_dialog: FileDialog = extension_api.dialog.get_dialogs_parent_node().get_node("SaveSprite")
 	## Re-ordering signal callables so that calculate_save gets called first
 	var old_save_dialog_connections = save_dialog.file_selected.get_connections()
 	for connection in old_save_dialog_connections:
@@ -73,7 +73,7 @@ func extension_about_to_shutdown() -> void:
 	# save detection signals ("Save" and "Save as" respectively)
 	var file_menu: PopupMenu = extension_api.general.get_global().top_menu_container.file_menu
 	file_menu.id_pressed.disconnect(calculate_save)
-	var save_dialog: FileDialog = extension_api.general.get_global().save_sprites_dialog
+	var save_dialog: FileDialog = extension_api.dialog.get_dialogs_parent_node().get_node("SaveSprite")
 	save_dialog.file_selected.disconnect(calculate_save)
 
 
@@ -101,17 +101,17 @@ func show_time_total():
 
 ## Just displays total changes.
 func show_changes_total():
-	changes_total.text = str(project_in_focus.get_meta("total_change", 0))
+	changes_total.text = str(int(project_in_focus.get_meta("total_change", 0)))
 
 
 ## Just displays total changes saves.
 func show_saves_total():
-	saves_total.text = str(project_in_focus.get_meta("total_saves", 0))
+	saves_total.text = str(int(project_in_focus.get_meta("total_saves", 0)))
 
 
 ## Just displays total sessions used by the project.
 func show_sessions_total():
-	sesions_total.text = str(project_in_focus.get_meta("old_sessions_total", 0))
+	sesions_total.text = str(int(project_in_focus.get_meta("old_sessions_total", 0)))
 
 
 # Calculators:
